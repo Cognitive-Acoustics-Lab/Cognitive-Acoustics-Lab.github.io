@@ -36,6 +36,12 @@ GitHub Pages で公開中（https://cognitive-acoustics-lab.github.io/ ）。HTM
 - 写真を差し替えるときは、原寸を `hero.jpg` に置き、`sips -s format jpeg -s formatOptions 82 -Z 1600 assets/img/hero.jpg --out assets/img/hero-1600.jpg` で縮小版を作り直す（`index.html` と `en/index.html` が参照）。
 - 額の下端の文言は `<div class="crt__hud">` 内で変更できる。
 
+### タブのアイコン（favicon）
+
+- 元画像は `assets/img/favicon.png`（正方形に近い写真。ローカルのみ、リポジトリ除外）。表示に使うのは `favicon-16.png`・`favicon-32.png`（タブ）と `favicon-180.png`（iOS ホーム画面）。全ページの `<head>` の `<link rel="icon">` と `<link rel="apple-touch-icon">` が参照する。
+- 差し替えるときは元画像を `favicon.png` に置き、`sips -c 736 736 assets/img/favicon.png --out /tmp/sq.png` で正方形にしてから `sips -z 32 32 /tmp/sq.png --out assets/img/favicon-32.png`（16, 180 も同様）。
+- ルートの `favicon.ico` は 16/32 の PNG を束ねたもので、古いブラウザや `/favicon.ico` を直接取りに来るツール向け。作り直すなら ImageMagick で `magick favicon-16.png favicon-32.png favicon.ico`。
+
 ### フッターのステータス表示
 
 `<div class="hud">` の MEMBERS の人数と SINCE の年は手書き。メンバーが増減したら全ページの数字を揃えて直す（検索置換で可）。
@@ -55,10 +61,11 @@ HP作成/
 ├── assets/
 │   ├── css/style.css   共通スタイル（デザイントークンはここ）
 │   ├── css/style-classic.css   旧デザイン（退避）
-│   └── img/            hero-1600.jpg（トップの写真）、members/（メンバー写真 400×400）
+│   └── img/            hero-1600.jpg（トップの写真）、favicon-16/32/180.png（タブ・ホーム画面のアイコン）、members/（メンバー写真 400×400）
 ├── _drafts/                デザイン検討に使ったモックとフォント比較ページ（公開前に削除してよい）
 ├── .nojekyll           GitHub Pages の Jekyll 処理を無効化
-├── .gitignore          _drafts/・原寸写真・.DS_Store・HANDOFF.md を除外
+├── favicon.ico         互換用アイコン（favicon-16/32.png を束ねたもの）
+├── .gitignore          _drafts/・原寸写真（hero.jpg, favicon.png, members/naka.JPG）・.DS_Store・HANDOFF.md を除外
 ├── HANDOFF.md          引き継ぎメモ（ローカルのみ、公開しない）
 └── README.md
 ```
