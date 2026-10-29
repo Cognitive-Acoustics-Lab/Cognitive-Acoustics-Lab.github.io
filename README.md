@@ -1,7 +1,7 @@
-# 認知音響学研究室 Web サイト（プロトタイプ）
+# 認知音響学研究室 Web サイト
 
 長崎県立大学 情報システム学部 認知音響学研究室（Cognitive Acoustics Lab.、中研究室）の公式サイト。
-GitHub Pages で公開することを前提に、HTML と CSS だけで構成しています。
+GitHub Pages で公開中（https://cognitive-acoustics-lab.github.io/ ）。HTML と CSS だけで構成しています。
 
 ## 雛形の方針
 
@@ -30,11 +30,11 @@ GitHub Pages で公開することを前提に、HTML と CSS だけで構成し
 
 2026-10-28 に「緑が多すぎる」との判断で，淡い緑を無彩色に，フッターを墨色に変更。緑の面はヒーローとお知らせ窓の 2 つ。アクセント色は検討の末，置かないことにした（三角・ゲージ・下線は墨色か白）。
 
-### ヒーローの写真を入れる
+### ヒーローの写真
 
-1. 4:3 程度の写真を `assets/img/hero.jpg` に置く（横 1200px 程度で十分）。
-2. `index.html` の `<div class="crt__ph">…</div>` を削除し、同じ場所に `<img src="assets/img/hero.jpg" alt="研究室の様子">` を置く。
-3. 額の下端の文言は `<div class="crt__hud">` 内で変更できる。
+- 表示に使うのは `assets/img/hero-1600.jpg`（横 1600px、約 0.5 MB）。原寸の `hero.jpg`（4032×3024、2.6 MB）はローカルにだけ置き、`.gitignore` でリポジトリから除外している。
+- 写真を差し替えるときは、原寸を `hero.jpg` に置き、`sips -s format jpeg -s formatOptions 82 -Z 1600 assets/img/hero.jpg --out assets/img/hero-1600.jpg` で縮小版を作り直す（`index.html` と `en/index.html` が参照）。
+- 額の下端の文言は `<div class="crt__hud">` 内で変更できる。
 
 ### フッターのステータス表示
 
@@ -55,9 +55,11 @@ HP作成/
 ├── assets/
 │   ├── css/style.css   共通スタイル（デザイントークンはここ）
 │   ├── css/style-classic.css   旧デザイン（退避）
-│   └── img/            写真・ロゴ置き場（現在は空）
+│   └── img/            hero-1600.jpg（トップの写真）、members/（メンバー写真 400×400）
 ├── _drafts/                デザイン検討に使ったモックとフォント比較ページ（公開前に削除してよい）
 ├── .nojekyll           GitHub Pages の Jekyll 処理を無効化
+├── .gitignore          _drafts/・原寸写真・.DS_Store・HANDOFF.md を除外
+├── HANDOFF.md          引き継ぎメモ（ローカルのみ、公開しない）
 └── README.md
 ```
 
@@ -66,7 +68,7 @@ HP作成/
 - `en/` に英語版 5 ページ（index, research, members, publications, access）と `profile.html`。「配属希望の方へ」は英語版なし。CSS・画像は共通（`../assets/...`）。
 - ヘッダー右端の「EN」「日本語」で相互に行き来する。`for-students.html` の EN は `en/index.html` へ。
 - 日本語版が正。英語版は論文・メンバーなど構造が変わるものだけ追従し，お知らせは主要項目（論文掲載・資金・開設など）のみ。業績の各項目は原語のまま，見出しだけ英語。
-- 公開ドメインが決まったら，各ページの `<head>` に `<link rel="alternate" hreflang="ja|en" href="絶対URL">` を追加する。
+- 日英ペアの 12 ページには `<head>` に `<link rel="alternate" hreflang="ja|en|x-default" href="絶対URL">` を入れてある（2026-10-29）。ページを増やしたら同じ形式で追加する（`for-students.html` は英語版がないので無し）。
 
 ## 更新のしかた
 
@@ -82,14 +84,28 @@ HP作成/
 ファイルをブラウザで直接開くだけで表示できます。
 ルート相対パスを使っていないので、`file://` でも GitHub Pages のサブパスでも動きます。
 
-## GitHub Pages で公開する手順
+## 公開先（2026-10-29 公開）
 
-1. このフォルダで `git init` し、GitHub にリポジトリを作成して push する。
-   - リポジトリ名を `<ユーザー名>.github.io` にすると `https://<ユーザー名>.github.io/` で公開。
-   - それ以外の名前なら `https://<ユーザー名>.github.io/<リポジトリ名>/` で公開（相対パスなのでそのまま動く）。
-2. GitHub のリポジトリ設定 → Pages → Source を「Deploy from a branch」、Branch を `main` / `(root)` にする。
-3. 数分後に公開 URL が表示される。独自ドメインを使う場合は `CNAME` ファイルを追加。
+| 項目 | 値 |
+| --- | --- |
+| 公開 URL | https://cognitive-acoustics-lab.github.io/ （英語版は `/en/`） |
+| リポジトリ | https://github.com/Cognitive-Acoustics-Lab/Cognitive-Acoustics-Lab.github.io （組織 Cognitive-Acoustics-Lab、公開） |
+| Pages の設定 | Deploy from a branch、`main` / `(root)`。`<組織名>.github.io` という名前なのでルート URL で配信 |
+| git 管理 | この `HP作成/` フォルダがそのままリポジトリ。`.gitignore` で `_drafts/`・`.DS_Store`・原寸写真（`hero.jpg`, `members/naka.JPG`）・`HANDOFF.md` を除外（ローカルには残る） |
 
+### 更新を反映する
+
+ファイルを編集したら、このフォルダで次を実行する。1 分ほどで公開に反映される。
+
+```
+git add -A
+git commit -m "お知らせを追加"   # 内容に合わせて
+git push
+```
+
+- 公開前にローカルで見るなら `python3 -m http.server 8000` → http://localhost:8000
+- 反映されないときは GitHub のリポジトリ → Actions タブ（pages-build-deployment）でビルド結果を確認する。
+- 独自ドメインにする場合は `CNAME` ファイルを追加し、各ページの hreflang の URL を書き換える。
 ## 要確認・未記入（プロトタイプ段階の仮置き）
 
 ページ内の黄色いラベル「要確認」「要記入」が目印です。
